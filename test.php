@@ -1,7 +1,8 @@
 ﻿<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
 <html xmlns="http://www.w3.org/1999/xhtml" >
 <head>
-    <title>Select Position</title>
+    <title>
+<span style="font-family:Cursive;font-size:16px;font-style:normal;font-weight:normal;text-decoration:none;text-transform:none;color:C8C1C1;">Select Position</span></title>
 </head>
 <body>
 	Select Position
