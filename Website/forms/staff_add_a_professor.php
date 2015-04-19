@@ -13,27 +13,32 @@
 	<div id="form_container">
 	
 		<h1><a>Faculty / Staff (Add a professor)</a></h1>
-		<form id="form_998552" class="appnitro"  method="post" action="">
+		<form id="form_998552" class="appnitro"  method="post" action="add_a_professor.php">
 					<div class="form_description">
 			<h2>Faculty / Staff (Add a professor)</h2>
 			<p>Please enter the following information to add a professor.</p>
 		</div>						
 			<ul >
-			
-					<li id="li_1" >
+			<li id="li_1" >
+		<label class="description" for="element_1">Enter ID (Upto 5 integers)</label>
+		<div>
+			<input id="element_1" name="id" class="element text medium" type="text" maxlength="255" value=""/> 
+		</div> 
+		</li>
+					<li id="li_2" >
 		<label class="description" for="element_1">Add a professor / FTI / GPTI </label>
 		<div>
-			<input id="element_1" name="element_1" class="element text medium" type="text" maxlength="255" value=""/> 
+			<input id="element_1" name="name" class="element text medium" type="text" maxlength="255" value=""/> 
 		</div> 
 		</li>		<li id="li_5" >
 		<label class="description" for="element_5">Semester of the joining date </label>
 		<div>
-			<input id="element_5" name="element_5" class="element text medium" type="text" maxlength="255" value=""/> 
+			<input id="element_5" name="join_date" class="element text medium" type="text" maxlength="255" value=""/> 
 		</div> 
 		</li>		<li id="li_4" >
 		<label class="description" for="element_4">Title </label>
 		<div>
-		<select class="element select medium" id="element_4" name="element_4"> 
+		<select class="element select medium" id="element_4" name="type"> 
 			<option value="" selected="selected"></option>
 <option value="1" >Professor</option>
 <option value="2" >FTI</option>
@@ -44,7 +49,7 @@
 		</li>		<li id="li_3" >
 		<label class="description" for="element_3">Status </label>
 		<div>
-		<select class="element select medium" id="element_3" name="element_3"> 
+		<select class="element select medium" id="element_3" name="tenure"> 
 			<option value="" selected="selected"></option>
 <option value="1" >Not applicable</option>
 <option value="2" >Tenured</option>
