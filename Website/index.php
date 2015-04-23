@@ -1,16 +1,21 @@
 <?php
 
-    include("include/db_connection.php");
+    include("init.php");
 
+    $prefix = "";
     if(isset($_GET['page']))
-        $page = $_GET['page'];
-    if(!isset($page) || $page == "head" || $page == "foot" || $page == "menu" || empty($page))
-        $page = "home";
-    $file = "views/".$page.".php";
-    if(file_exists($file))
+        $pg = $_GET['page'];
+    if(!isset($pg) || $pg == "head" || $pg == "foot" || empty($pg))
+        $pg = "home";
+    if(isset($_GET['prefix']))
+        $prefix = $_GET['prefix'];
+
+    $file = "views/".$prefix."/".$pg.".php";
+    if(file_exists($file)) {
         include($file);
-    else
-        include("views/error404.php");
+    } else
+        include("views/errors/error404.php");
+
 
 
 
