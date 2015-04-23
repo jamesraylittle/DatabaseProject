@@ -3,7 +3,10 @@
             <?php
                 if($this->getCurrentPage() != "?" || $this->getCurrentPage() == "home") {//dont display if we are at home.
             ?>
-                <br /><br /><a href="javascript:history.go(-1)"><- Go Back</a><br /><br />
+                    <br /><br />
+                    <a href="javascript:history.go(-1)"><- Go Back</a> |
+                    <a href="?">Home</a>
+                    <br /><br />
             <?php
                 }
             ?>
