@@ -12,10 +12,10 @@
         $year = $_GET['year'];
         $page->showHeader();
 
-        $result = $DB->execute("SELECT * FROM courses WHERE year = '".$year."'")->fetchAll();
+        $result = $DB->execute("SELECT * FROM courses WHERE catalog_year = '".$year."'")->fetchAll();
 
         foreach($result as $row) {
-            print_r($row);
+            echo($row["required"]);
         }
 
         $page->showFooter();
