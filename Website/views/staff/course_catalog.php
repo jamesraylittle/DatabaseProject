@@ -4,21 +4,22 @@
 
     if(isset($_POST['submit'])) { //The Submit button has been pressed. Process the form.
         //Making assumptions about if the values are set and are "valid".
-        $semester = $_POST["semester"];
-        
-        $DB->execute(
-            "INSERT INTO Course_Sections (course_id, section_id, semester) VALUES(
-            '".$course_id."',
-            '".$section_id."',
-            '".$semester."'
-            )"
+        $year = $_POST["catalog_year"];
 
-  );
+        $page->addQuery("year", $year);
+        $page->redirect();
+    } else if(isset($_GET["year"])) {
+        $year = $_GET['year'];
+        $page->showHeader();
 
-        $page->addQuery("message", "Instructor has been assigned.");
-        $page->redirectToMenu();
-}
-    else { //No Post, display page.
+        $result = $DB->execute("SELECT * FROM courses WHERE year = '".$year."'")->fetchAll();
+
+        foreach($result as $row) {
+            print_r($row);
+        }
+
+        $page->showFooter();
+    } else { //No Post, display page.
     $page = new Page("Course Catalog");
     $page->showHeader();
 
