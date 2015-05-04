@@ -8,6 +8,7 @@
         $section_id = $_POST["section_id"];
         $name = $_POST["name"]; 
         $hours = $_POST["hours"];
+        $ta_id = $_POST["ta_id"];
 
         $DB->execute(
             "INSERT INTO TAs (name, hours) VALUES(

@@ -13,9 +13,10 @@
         $page->showHeader();
 
         $result = $DB->execute("SELECT * FROM courses WHERE catalog_year = '".$year."'")->fetchAll();
-
+        echo ("Course Catalog in the given Year <br> <br>");
         foreach($result as $row) {
-            echo($row["required"]);
+            echo($row["name"]);
+            echo (" <br>");
         }
 
         $page->showFooter();
