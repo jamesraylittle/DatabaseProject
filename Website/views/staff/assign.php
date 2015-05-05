@@ -31,7 +31,8 @@
   );
 
 $DB->execute(
-            "INSERT INTO Sections (section_id, time, enrolled, max_enrolled, room_no) VALUES(
+            "INSERT INTO Sections (course_id,section_id, time, enrolled, max_enrolled, room_no) VALUES(
+            '".$course_id."',
             '".$section_id."',
             '".$time."',
             '".$enrolled."',
