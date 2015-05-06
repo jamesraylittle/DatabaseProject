@@ -1,53 +1,40 @@
 <?php
-    $page = new Page("Select Position");
+    $page = new Page("Course Assigned");
 
-
-    if(isset($_POST['submit'])) { //The Submit button has been pressed. Process the form.
-        //Making assumptions about if the values are set and are "valid".
-        $id = $_POST["instructor_id"];
-
-        $page->addQuery("id", $id);
-        $page->redirect();
-    } else if(isset($_GET["id"])) {
-        $id = $_GET['id'];
-        $page->showHeader();
-
-        $result = $DB->execute("SELECT * FROM Assigned_to WHERE instructor_id = '".$id."'")->fetchAll();
-echo ("Course assigned <br>");
-        foreach($result as $row) {
-
-               $result = $DB->execute("SELECT * FROM Course_Sections WHERE section_id = '".$row["section_id"]."'")->fetchAll();
-
-               foreach($result as $row) {
-             $result = $DB->execute("SELECT * FROM Courses WHERE course_id = '".$row["course_id"]."'")->fetchAll();
-               
-               foreach($result as $row) {
-              echo($row["name"]);
-              echo ("<br>");
-        }
-        }
-        }
-
-        
-
-
-
-        $page->showFooter();
-    } else { //No Post, display page.
-    $page = new Page("Course assigned ");
     $page->showHeader();
 
-    echo newForm(
-        "Courses Assigned", //Form Id
-        $page->getPage(), //Form Action
-        "Course assigned", //Title
-        array(
-            formItem(1, "Instructor ID", "instructor_id") //Form input field
-        )
-    );
+
+    if(isset($_POST['submit'])) {
+        $id = $_POST["instructor_id"];
+
+        $title = "Courses for Instructor";
+        $headerValues = array("Subject", "Level", "Description", "CRN", "Required?", "Special?");
+        $rowValues = array();
+
+        foreach($DB->execute("SELECT * FROM Assigned_to WHERE instructor_id = '".$id."'")->fetchAll() as $row) {
+            $course_id = $DB->execute("SELECT course_id FROM Course_sections WHERE id = '".$row['course_section_id']."'")->fetchRow()['course_id'];
+
+            $rowValues = array_merge($rowValues, $DB->execute("SELECT subject, level, description, crn, required, special FROM courses WHERE id = '".$course_id."'")->fetchAll());
+        }
+
+        results($title, $headerValues, $rowValues);
+
+    } else { //No Post, display page.
+
+        $ins = buildArrays($DB->execute("SELECT instructor_id, name FROM Instructors")->fetchAll(), "instructor_id", "name");
+
+        echo newForm(
+            "Courses Assigned", //Form Id
+            $page->getPage(), //Form Action
+            "Course assigned", //Title
+            array(
+                optionItem(1, "Instructor", "instructor_id", $ins[0], $ins[1])//Form input field
+            )
+        );
+
+    }
 
     $page->showFooter();
-    }
 
 ?>
 

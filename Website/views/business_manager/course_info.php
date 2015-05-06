@@ -1,53 +1,77 @@
 <?php
-    $page = new Page("Select Position");
-
-
-    if(isset($_POST['submit'])) { //The Submit button has been pressed. Process the form.
-        //Making assumptions about if the values are set and are "valid".
-        $course_id = $_POST["course_id"];
-
-        $page->addQuery("course_id", $course_id);
-        $page->redirect();
-    } else if(isset($_GET["course_id"])) {
-        $course_id = $_GET['course_id'];
-        $page->showHeader();
-
-        $result = $DB->execute("SELECT * FROM Courses WHERE course_id = '".$course_id."'")->fetchAll();
-echo ("Course assigned <br>");
-               foreach($result as $row) {
-             $result = $DB->execute("SELECT * FROM Course_Sections WHERE course_id = '".$row["course_id"]."'")->fetchAll();
-               
-               foreach($result as $row) {
-                echo($row["course_id"]);
-              echo (" is offered in  ");
-              echo($row["semester"]);
-              echo ("<br>");
-        }
-    
-        }
-
-        
-
-
-
-        $page->showFooter();
-    } else { //No Post, display page.
-    $page = new Page("Courses Offerings");
+    $page = new Page("Display Course Offerings");
     $page->showHeader();
 
-    echo newForm(
-        "courses_offerings",
-        $page->getPage(),
-        "Last 5 years Courses",
-        array(
-            formItem(1, "Course ID", "course_id"),
-        )
-    );
 
+    if(isset($_POST['submit'])) {
+        $course_id = $_POST["course_id"];
 
-    $page->showFooter();
+        $course = $DB->execute("SELECT * FROM Courses WHERE id = '".$course_id."'")->fetchRow();
+
+        $n = $_POST['year'];
+
+        $headerValues = array("ID", "Name", "Description", "CRN", "Required", "Special", "Section Number", "Instructor", "Enrollment", "Date");
+        $rowValues = array();
+        $title = "Course Offerings For ".$course['name'].", for the last ".$n." years";
+
+        $i = 0;
+        foreach($DB->execute("SELECT * FROM Course_sections WHERE course_id = '".$course_id."'")->fetchAll() as $row) {
+            $section_id = $row['section_id'];
+            foreach($DB->execute("SELECT * FROM Sections WHERE id = '".$section_id."' ORDER BY number DESC")->fetchAll() as $section) {
+
+                //Why not :) - I mean, other than readability...
+                $instructor = $DB->execute("SELECT name FROM Instructors WHERE instructor_id = '" . $DB->execute("SELECT instructor_id FROM Assigned_to WHERE course_section_id = '" . $row['id'] . "'")->fetchRow()['instructor_id'] . "'")->fetchRow()['name'];
+
+                $enrollment = $section['enrolled'].'/'.$section['max_enrolled'];
+
+                $semester = $DB->execute("SELECT * FROM Semesters WHERE id = '".$section['semester_id']."' AND year >= YEAR(CURDATE())-".$n." AND year <= YEAR(CURDATE())")->fetchRow();
+
+                if(sizeof($semester) > 0) {
+                    $semester = $semester['season'] . ' ' . $semester['year'];
+
+                    $rowValues = array_merge
+                    (
+                        $rowValues,
+                        array($i =>
+                            array(
+                                $course["id"],
+                                $course["name"],
+                                $course["description"],
+                                $course["crn"],
+                                $course["required"],
+                                $course["special"],
+                                $section["number"],
+                                $instructor,
+                                $enrollment,
+                                $semester
+                            )
+                        )
+                    );
+
+                    $i++;
+                }
+            }
+        }
+
+        results($title, $headerValues, $rowValues);
+
+    } else { //No Post, display page.
+
+        $array = buildArrays($DB->execute("SELECT id, description FROM Courses")->fetchAll(), "id", "description");
+
+        echo newForm(
+            "courses_offerings",
+            $page->getPage(),
+            "Course Offering for Last n Years",
+            array(
+                optionItem(1, "Course", "course_id", $array[0], $array[1]),
+                formItem(2, "Years", "year")
+            )
+        );
+
     }
 
+    $page->showFooter();
 ?>
 
 

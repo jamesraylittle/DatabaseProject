@@ -12,6 +12,8 @@
                 menuItem("Assign instructor for specific Section", 3, $page->link("assign", $folder));
                 menuItem("Assign a TA", 4, $page->link("input_ta", $folder));
                 menuItem("List Course Catalog", 5, $page->link("course_catalog", $folder));
+                menuItem("Add a Course", 6, $page->link("add_course", $folder));
+                menuItem("Add a Semester", 7, $page->link("add_sem", $folder));
             ?>
         </ul>
         <div class="clearfix"></div>
