@@ -1,55 +1,40 @@
 <?php
-    $page = new Page("Course Catalog");
-    $page->showHeader();
+    $page = new Page("Select Position");
+
 
     if(isset($_POST['submit'])) { //The Submit button has been pressed. Process the form.
         //Making assumptions about if the values are set and are "valid".
-        $year = $_POST["year"];
+        $year = $_POST["catalog_year"];
 
-        $headerValues = array("Course ID", "Course Name", "Course Description", "CRN", "Required?", "Special?", "Semester", "Section");
-        $rowValues = array();
+        $page->addQuery("year", $year);
+        $page->redirect();
+    } else if(isset($_GET["year"])) {
+        $year = $_GET['year'];
+        $page->showHeader();
 
-        foreach($DB->execute("SELECT * FROM Semesters WHERE year = '".$year."'")->fetchAll() as $row) {
-
-            $semester = $row['season'] . ' ' . $year;
-
-            foreach($DB->execute("SELECT * FROM Sections WHERE semester_id = '".$row['id']."'")->fetchAll() as $section) {
-
-                $number = $section['number'];
-
-                foreach($DB->execute("SELECT * FROM Course_sections WHERE section_id = '".$section['id']."'")->fetchAll() as $course_sec)
-
-                    $values = $DB->execute("SELECT * FROM Courses WHERE id = '".$course_sec['course_id']."'")->fetchAll();
-
-                    for($i = 0; $i<sizeof($values); $i++) {
-                        $values[$i]["semester"] = $semester;
-                        $values[$i]["number"] = $number;
-                    }
-
-                    $rowValues = array_merge($rowValues, $values);
-            }
+        $result = $DB->execute("SELECT * FROM courses WHERE catalog_year = '".$year."'")->fetchAll();
+        echo ("Course Catalog in the given Year <br> <br>");
+        foreach($result as $row) {
+            echo($row["name"]);
+            echo (" <br>");
         }
 
-        results("Courses for year: " . $year, $headerValues, $rowValues);
-
-
-
+        $page->showFooter();
     } else { //No Post, display page.
+    $page = new Page("Course Catalog");
+    $page->showHeader();
 
-        $array = buildArray($DB->execute("SELECT DISTINCT(year) as year FROM Semesters ORDER BY year DESC")->fetchAll(), "year");
-
-        echo newForm(
-            "course", //Form Id
-            $page->getPage(), //Form Action
-            "Course Catalog Year", //Title
-            array(
-                optionItem(1, "Catalog Year", "year", $array, $array)
-            )
-        );
-
-    }
+    echo newForm(
+        "course", //Form Id
+        $page->getPage(), //Form Action
+        "Course Catalog Year", //Title
+        array(
+            formItem(1, "Catalog Year", "catalog_year") //Form input field
+        )
+    );
 
     $page->showFooter();
+    }
 
 ?>
 

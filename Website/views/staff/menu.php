@@ -8,12 +8,10 @@
         <ul class="nav navbar-nav navbar-right h4 nav-new style2" id="navbar_anon" style="clear: right;">
             <?php
                 $folder = "staff";
-                menuItem("Add a Professor", 2, $page->link("add", "staff"));
-                menuItem("Assign instructor for specific Section", 3, $page->link("assign", $folder));
-                menuItem("Assign a TA", 4, $page->link("input_ta", $folder));
-                menuItem("List Course Catalog", 5, $page->link("course_catalog", $folder));
-                menuItem("Add a Course", 6, $page->link("add_course", $folder));
-                menuItem("Add a Semester", 7, $page->link("add_sem", $folder));
+                menuItem("1a. Add a Professor", 2, $page->link("add", "staff"));
+                menuItem("1b. Assign instructor for specific Section", 3, $page->link("assign", $folder));
+                menuItem("1c. Assign a TA", 4, $page->link("input_ta", $folder));
+                menuItem("1d. List Course Catalog", 5, $page->link("course_catalog", $folder));
             ?>
         </ul>
         <div class="clearfix"></div>

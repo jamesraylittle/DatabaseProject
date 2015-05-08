@@ -2,7 +2,8 @@
     $page = new Page("Update Preferences");
 
 
-    if(isset($_POST['submit'])) {
+    if(isset($_POST['submit'])) { //The Submit button has been pressed. Process the form.
+        //Making assumptions about if the values are set and are "valid".
         $instructor_id = $_POST["instructor_id"];
         $course_id = $_POST["course_id"];
         $year = $_POST["year"];
@@ -15,32 +16,30 @@
             '".$year."',
             '".$loads."'
             )"
-        );
+
+  );
+
 
         $page->addQuery("message", "Preference has been updated.");
         $page->redirectToMenu();
+}
+    else { //No Post, display page.
+    $page = new Page("Update Preferences");
+    $page->showHeader();
 
-    } else { //No Post, display page.
-        $page->showHeader();
+    echo newForm(
+       "update_pref",
+        $page->getPage(),
+        "Update Preferences",
+        array(
+            formItem(1, "Instructor's ID", "instructor_id"),
+            formItem(2, "Course Preferences to Teach", "course_id"),
+            formItem(3, "Course Year to Teach", "year"),
+            formItem(4, "Enter load distribution (Eg: Spring or Fall or Equal)", "loads")
+        )
+    );
 
-        $ins = buildArrays($DB->execute("SELECT instructor_id, name FROM Instructors")->fetchAll(), "instructor_id", "name");
-        $course = buildArrays($DB->execute("SELECT id, description FROM Courses")->fetchAll(), "id", "description");
-
-        $loads = array("Fall", "Spring", "Summer I", "Summer II", "Winter", "Equal");
-
-        echo newForm(
-           "update_pref",
-            $page->getPage(),
-            "Update Preferences",
-            array(
-                optionItem(1, "Instructor", "instructor_id", $ins[0], $ins[1]),
-                optionItem(2, "Course Preference to Teach", "course_id", $course[0], $course[1]),
-                formItem(3, "Course Year to Teach", "year"),
-                optionItem(4, "Enter Load Distribution", "loads", $loads, $loads)
-            )
-        );
-
-        $page->showFooter();
+    $page->showFooter();
     }
 
 ?>
